@@ -7,7 +7,6 @@ namespace SavingsDev.API.Entities
     {
         public FinancialObjective(string? title, string? description, decimal? valueObject)
         {
-            Id = new Random().Next(0, 1000);
             Title = title;
             Description = description;
             ValueObject = valueObject;

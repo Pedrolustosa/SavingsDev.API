@@ -1,9 +1,11 @@
+using Microsoft.EntityFrameworkCore;
 using SavingsDev.API.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddSingleton<Context>();
+var connectionString = builder.Configuration.GetConnectionString("SavingsDev");
+builder.Services.AddDbContext<Context>(o => o.UseSqlServer(connectionString));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
