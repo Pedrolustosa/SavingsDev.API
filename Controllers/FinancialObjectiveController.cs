@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SavingsDev.API.Entities;
 using SavingsDev.API.Models;
 using SavingsDev.API.Persistence;
@@ -28,7 +29,9 @@ namespace SavingsDev.API.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            var objective = _context.Objectives.SingleOrDefault(obj => obj.Id == id);
+            var objective = _context.Objectives.Include(o => o.Operations)
+                                               .SingleOrDefault(obj => obj.Id == id);
+
             if (objective == null)
             {
                 return NotFound();
@@ -44,6 +47,7 @@ namespace SavingsDev.API.Controllers
             var objective = new FinancialObjective(model.title, model.description, model.valueObject);
 
             _context.Objectives.Add(objective);
+            _context.SaveChanges();
 
             var id = objective.Id;
 
@@ -54,15 +58,16 @@ namespace SavingsDev.API.Controllers
         [HttpPost("{id}/operations")]
         public IActionResult PostOperation(int id, OperationInputModel model)
         {
-            var operation = new Operation(model.Value, model.Type);
+            var operation = new Operation(model.Value, model.Type, id);
 
-            var objective = _context.Objectives.SingleOrDefault(obj => obj.Id == id);
+            var objective = _context.Objectives.Include(o => o.Operations).SingleOrDefault(obj => obj.Id == id);
             if (objective == null)
             {
                 return NotFound();
             }
 
             objective.PerformOperation(operation);
+            _context.SaveChanges();
 
             return NoContent();
         }

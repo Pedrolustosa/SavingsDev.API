@@ -4,11 +4,11 @@ namespace SavingsDev.API.Entities
 {
     public class Operation
     {
-        public Operation(decimal value, OperationType type)
+        public Operation(decimal value, OperationType type, int idObjective)
         {
-            Id = new Random().Next(1, 1000);
             Value = value;
             Type = type;
+            IdObjective = idObjective;
             OperationDate = DateTime.Now;
         }
 
@@ -16,5 +16,6 @@ namespace SavingsDev.API.Entities
         public decimal Value { get; private set; }
         public OperationType Type { get; private set; }
         public DateTime OperationDate { get; set; }
+        public int IdObjective { get; set; }
     }
 }
