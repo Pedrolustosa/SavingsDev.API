@@ -5,6 +5,8 @@ namespace SavingsDev.API.Entities
 {
     public class FinancialObjective
     {
+        private const decimal YIELD = 0.03m;
+
         public FinancialObjective(string? title, string? description, decimal? valueObject)
         {
             Title = title;
@@ -37,6 +39,17 @@ namespace SavingsDev.API.Entities
             var totalWithdraw = Operations.Where(o => o.Type == OperationType.Withdraw).Sum(s => s.Value);
 
             return totalDeposit - totalWithdraw;
+        }
+
+        public void Render()
+        {
+            var valueIncome = Balance * YIELD;
+
+            Console.WriteLine($"Balance: {Balance}, Yield: {valueIncome}");
+
+            var Withdraw = new Operation(valueIncome, OperationType.Deposit, Id);
+
+            Operations.Add(Withdraw);
         }
     }
 }

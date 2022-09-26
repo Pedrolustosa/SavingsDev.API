@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SavingsDev.API.Jobs;
 using SavingsDev.API.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("SavingsDev");
 builder.Services.AddDbContext<Context>(o => o.UseSqlServer(connectionString));
+
+builder.Services.AddHostedService<YieldAutomateJob>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
